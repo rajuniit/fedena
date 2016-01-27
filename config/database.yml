@@ -1,7 +1,7 @@
 development:
       host: localhost
       adapter: mysql
-      database: fedena_ultimate
+      database: school
       port: 3306
       username: root
       password: foradian
@@ -17,9 +17,9 @@ test: &test
 production:
       host: localhost
       adapter: mysql
-      database: fedena_ultimate
+      database: school
       port: 3306
       username: root
-      password: foradian
+      password: P12345678P
 cucumber:
   <<: *test
