@@ -68,7 +68,7 @@ class StudentController < ApplicationController
             recipients.push @student.phone2 unless @student.phone2.blank?
           end
           unless recipients.empty?
-            Delayed::Job.enqueue(SmsManager.new(message,recipients))
+            Delayed::Job.enqueue(TwilloSmsManager.new(message,recipients))
           end
         end
         flash[:notice] = "#{t('flash8')}"
@@ -103,7 +103,7 @@ class StudentController < ApplicationController
           recipients.push guardian.mobile_phone unless guardian.mobile_phone.nil?
         end
         unless recipients.empty?
-          Delayed::Job.enqueue(SmsManager.new(message,recipients))
+          Delayed::Job.enqueue(TwilloSmsManager.new(message,recipients))
         end
       end
       redirect_to :action => "previous_data", :id => @student.id
@@ -128,7 +128,7 @@ class StudentController < ApplicationController
           recipients.push guardian.mobile_phone unless guardian.mobile_phone.nil?
         end
         unless recipients.empty?
-          Delayed::Job.enqueue(SmsManager.new(message,recipients))
+          Delayed::Job.enqueue(TwilloSmsManager.new(message,recipients))
         end
       end
       redirect_to :action => "profile", :id => @student.id

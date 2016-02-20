@@ -219,7 +219,7 @@ class AttendancesController < ApplicationController
             end
           end
           unless recipients.empty?
-            Delayed::Job.enqueue(SmsManager.new(message,recipients))
+            Delayed::Job.enqueue(TwilloSmsManager.new(message,recipients))
           end
         end
         format.js { render :action => 'create' }

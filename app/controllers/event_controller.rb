@@ -188,7 +188,7 @@ class EventController < ApplicationController
         end
         unless recipients.empty?
           message = "#{t('event_notification')}: #{event.title}.#{t('from')} : #{event.start_date} #{t('to')} #{event.end_date}"
-          Delayed::Job.enqueue(SmsManager.new(message,recipients))
+          Delayed::Job.enqueue(TwilloSmsManager.new(message,recipients))
         end
       end
     else
@@ -240,7 +240,7 @@ class EventController < ApplicationController
       end
       unless recipients.empty?
         message = "#{t('event_notification')}: #{event.title}.#{t('from')} : #{event.start_date} #{t('to')} #{event.end_date}"
-        Delayed::Job.enqueue(SmsManager.new(message,recipients))
+        Delayed::Job.enqueue(TwilloSmsManager.new(message,recipients))
       end
     end
     Delayed::Job.enqueue(DelayedReminderJob.new( :sender_id  => current_user.id,

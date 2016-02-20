@@ -100,7 +100,7 @@ class ExamController < ApplicationController
             @message = "#{@exam_group.name} #{t('exam_timetable_published')}" if params[:status] == "schedule"
             @message = "#{@exam_group.name} #{t('exam_result_published')}" if params[:status] == "result"
             unless recipients.empty?
-              sms = Delayed::Job.enqueue(SmsManager.new(@message,recipients))
+              sms = Delayed::Job.enqueue(TwilloSmsManager.new(@message,recipients))
             end
           end
         end
