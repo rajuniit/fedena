@@ -82,7 +82,7 @@ class SmsController < ApplicationController
         end
         unless @recipients.empty?
           message = params[:send_sms][:message]
-          sms = Delayed::Job.enqueue(SmsManager.new(message,@recipients))
+          sms = Delayed::Job.enqueue(TwilloSmsManager.new(message,@recipients))
           # raise @recipients.inspect
           render(:update) do |page|
             page.replace_html 'status-message',:text=>"<p class=\"flash-msg\">#{t('sms_sending_intiated', :log_url => url_for(:controller => "sms", :action => "show_sms_messages"))}</p>"

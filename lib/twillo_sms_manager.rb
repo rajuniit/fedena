@@ -21,7 +21,7 @@ require 'net/http'
 require 'yaml'
 require 'translator'
 
-class SmsManager
+class TwilloSmsManager
   attr_accessor :recipients, :message
 
   def initialize(message, recipients)
@@ -55,42 +55,46 @@ class SmsManager
 
   def perform
     if @config.present?
-      #message_log = SmsMessage.new(:body=> @message)
-      #message_log.save
-      #encoded_message = URI.encode(@message)
-      #request = "#{@sms_url}?#{@username_mapping}=#{@username}&#{@password_mapping}=#{@password}&#{@sender_mapping}=#{@sendername}&#{@message_mapping}=#{encoded_message}#{@additional_param}&#{@phone_mapping}="
-      #@recipients.each do |recipient|
-      #  cur_request = request
-      #  cur_request += "#{recipient}"
-      #  begin
-      #    response = Net::HTTP.get_response(URI.parse(cur_request))
-      #    if response.body.present?
-      #      message_log.sms_logs.create(:mobile=>recipient,:gateway_response=>response.body)
-      #      if @success_code.present?
-      #        if response.body.to_s.include? @success_code
-      #          sms_count = Configuration.find_by_config_key("TotalSmsCount")
-      #          new_count = sms_count.config_value.to_i + 1
-      #          sms_count.update_attributes(:config_value=>new_count)
-      #        end
-      #      end
-      #    end
-      #  rescue Timeout::Error => e
-      #    message_log.sms_logs.create(:mobile=>recipient,:gateway_response=>e.message)
-      #  rescue Errno::ECONNREFUSED => e
-      #    message_log.sms_logs.create(:mobile=>recipient,:gateway_response=>e.message)
-      #  end
-      #end
-
-      url = URI.parse("#{@sms_url}")
-      req = Net::HTTP::Post.new(url.request_uri)
-      req.basic_auth 'ACc967eebc9c8a2ab9e9c992a396f866e6', '2da4feef75471cf92d081e8d46851fac'
-      req.set_form_data({'To'=>"+8801716528608", 'From'=>"+12564856086",'Body' => 'I am from chotrol school'})
-      http = Net::HTTP.new(url.host, url.port)
-      http.use_ssl = (url.scheme == "https")
-      response = http.request(req)
       message_log = SmsMessage.new(:body=> @message)
       message_log.save
-      message_log.sms_logs.create(:mobile=>"+8801716528608",:gateway_response=>response.body)
+      #request = "#{@sms_url}?#{@username_mapping}=#{@username}&#{@password_mapping}=#{@password}&#{@sender_mapping}=#{@sendername}&#{@message_mapping}=#{encoded_message}#{@additional_param}&#{@phone_mapping}="
+      url = URI.parse("#{@sms_url}")
+      req = Net::HTTP::Post.new(url.request_uri)
+      req.basic_auth "#{@username}", "#{@password}"
+      @recipients.each do |recipient|
+        req.set_form_data({'To'=>"#{recipient}", 'From'=>"#{@sendername}",'Body' => "#{@message}"})
+        http = Net::HTTP.new(url.host, url.port)
+        http.use_ssl = (url.scheme == "https")
+
+        begin
+          response = http.request(req)
+          if response.body.present?
+            message_log.sms_logs.create(:mobile=>recipient,:gateway_response=>response.body)
+            if @success_code.present?
+              if response.body.to_s.include? @success_code
+                sms_count = Configuration.find_by_config_key("TotalSmsCount")
+                new_count = sms_count.config_value.to_i + 1
+                sms_count.update_attributes(:config_value=>new_count)
+              end
+            end
+          end
+        rescue Timeout::Error => e
+          message_log.sms_logs.create(:mobile=>recipient,:gateway_response=>e.message)
+        rescue Errno::ECONNREFUSED => e
+          message_log.sms_logs.create(:mobile=>recipient,:gateway_response=>e.message)
+        end
+      end
+
+      #url = URI.parse("#{@sms_url}")
+      #req = Net::HTTP::Post.new(url.request_uri)
+      #req.basic_auth 'ACc967eebc9c8a2ab9e9c992a396f866e6', '2da4feef75471cf92d081e8d46851fac'
+      #req.set_form_data({'To'=>"+8801716528608", 'From'=>"+12564856086",'Body' => 'I am from chotrol school'})
+      #http = Net::HTTP.new(url.host, url.port)
+      #http.use_ssl = (url.scheme == "https")
+      #response = http.request(req)
+      #message_log = SmsMessage.new(:body=> @message)
+      #message_log.save
+      #message_log.sms_logs.create(:mobile=>"+8801716528608",:gateway_response=>response.body)
     end
   end
 end
