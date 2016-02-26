@@ -57,7 +57,7 @@ class IcombdSmsManager
     if @config.present?
       message_log = SmsMessage.new(:body=> @message)
       message_log.save
-      url = URI("#{@sms_url}")
+      url = URI.parse("#{@sms_url}")
       base64_auth_string = Base64.encode64("#{@username}:#{@password}")
       http = Net::HTTP.new(url.host, url.port)
       http.use_ssl = true
