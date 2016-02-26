@@ -1,16 +1,16 @@
 sms_settings:
- username: "ACc967eebc9c8a2ab9e9c992a396f866e6"
- password: "2da4feef75471cf92d081e8d46851fac"
+ username: "itsourceltd"
+ password: "2AigkYJH"
  sendername: "+12564856086"
- host_url: "https://api.twilio.com/2010-04-01/Accounts/ACc967eebc9c8a2ab9e9c992a396f866e6/Messages.json"
- success_code: "success"
+ host_url: "http://api.bulksms.icombd.com/restapi/sms/1/text/single"
+ success_code: "sent"
 
 parameter_mappings:
  username: username
  password: password
- sendername: From
- message: Body
- phone: To
+ sendername: from
+ message: text
+ phone: to
 
 # Additional parameters to be added should given in the format "param1=value1&param2=value2&..."
 additional_parameters: ""
