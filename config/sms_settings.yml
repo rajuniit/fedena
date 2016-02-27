@@ -1,9 +1,9 @@
 sms_settings:
  username: "itsourceltd"
  password: "2AigkYJH"
- sendername: "+12564856086"
- host_url: "http://api.bulksms.icombd.com/restapi/sms/1/text/single"
- success_code: "sent"
+ sendername: "ChotroSchool"
+ host_url: "http://api.bulksms.icombd.com/restapi/sms/1/text/single/"
+ success_code: "PENDING"
 
 parameter_mappings:
  username: username

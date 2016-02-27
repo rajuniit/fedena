@@ -55,40 +55,42 @@ class IcombdSmsManager
 
   def perform
     if @config.present?
-      message_log = SmsMessage.new(:body=> @message)
+      message_log = SmsMessage.new(:body => @message)
       message_log.save
       url = URI.parse("#{@sms_url}")
-      base64_auth_string = Base64.encode64("#{@username}:#{@password}")
+      base64_auth_string = Base64.encode64("#{@username}:#{@password}").gsub(/\n/, '')
       http = Net::HTTP.new(url.host, url.port)
-      http.use_ssl = true
+      http.use_ssl = false
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
-      request = Net::HTTP::Post.new(url)
+      request = Net::HTTP::Post.new(url.request_uri)
+      puts base64_auth_string.inspect
       request["authorization"] = "Basic #{base64_auth_string}"
       request["content-type"] = 'application/json'
-      request["accept"] ='application/json'
 
       body = Hash.new
-      body["from"] = "Chotro School"
+      body["from"] = "#{@sendername}"
       body["to"] = @recipients
       body["text"] = @message
-      request.body = body
+      puts JSON(body).inspect
+      request.body = JSON(body)
 
       begin
         response = http.request(request)
         if response.body.present?
-          message_log.sms_logs.create(:mobile=>@recipients.to_s,:gateway_response=>response.body)
+          message_log.sms_logs.create(:mobile => @recipients.to_s, :gateway_response => response.body)
           if @success_code.present?
-            if response.body.status.eql? @success_code
+            response_hash = response.body.to_hash
+            if response_hash['messages'][0]['status']['groupName'].include? @success_code
               sms_count = Configuration.find_by_config_key("TotalSmsCount")
-              sms_count.update_attributes(:config_value=>response.body.smsCount)
+              sms_count.update_attributes(:config_value => response_hash['messages'][0]['smsCount'])
             end
           end
         end
       rescue Timeout::Error => e
-        message_log.sms_logs.create(:mobile=>@recipients.to_s,:gateway_response=>e.message)
+        message_log.sms_logs.create(:mobile => @recipients.to_s, :gateway_response => e.message)
       rescue Errno::ECONNREFUSED => e
-        message_log.sms_logs.create(:mobile=>@recipients.to_s,:gateway_response=>e.message)
+        message_log.sms_logs.create(:mobile => @recipients.to_s, :gateway_response => e.message)
       end
     end
   end
