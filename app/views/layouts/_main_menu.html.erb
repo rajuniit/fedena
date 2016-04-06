@@ -28,6 +28,7 @@
       <ul class="level-1">
         <li><%= link_to "#{t('attendance_register')}", :controller => 'attendances', :action => 'index'  %></li>
         <li><%= link_to "#{t('attendance_report')}", :controller => "attendance_reports", :action => "index" %></li>
+        <li><%= link_to "#{t('attendance_upload')}", :controller => 'attendance_imports', :action => 'new'  %></li>
       </ul>
     </li>
   <% elsif @current_user.employee? %>

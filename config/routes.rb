@@ -9,6 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :attendances, :collection=>{:daily_register=>:get,:subject_wise_register=>:get}
   map.resources :employee_attendances
   map.resources :attendance_reports
+  map.resources :attendance_imports
   map.resources :cce_exam_categories
   map.resources :assessment_scores,:collection=>{:exam_fa_groups=>[:get],:observation_groups=>[:get]}
   map.resources :cce_settings,:collection=>{:basic=>[:get],:scholastic=>[:get],:co_scholastic=>[:get]}
@@ -65,5 +66,6 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action' 
   map.connect ':controller/:action/:id/:id2'
   map.connect ':controller/:action/:id.:format'
+  map.connect 'attendances/upload', :controller => 'attendances', :action => 'upload'
 
 end
