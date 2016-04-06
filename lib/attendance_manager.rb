@@ -60,7 +60,7 @@ class AttendanceManager
     batches.each do |batch|
       batch_students = batch.students
       batch_students.each do |student|
-        if @student_ids.include? student.id
+        if @student_ids.include? student.admission_no
           if student.is_sms_enabled
             if sms_setting.student_sms_active
               @present_student_recipients.push student.phone2 unless (student.phone2.nil? or student.phone2 == "")
