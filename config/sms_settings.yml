@@ -1,8 +1,8 @@
 sms_settings:
- username: "ACc967eebc9c8a2ab9e9c992a396f866e6"
- password: "2da4feef75471cf92d081e8d46851fac"
- sendername: "+12564856086"
- host_url: "https://api.twilio.com/2010-04-01/Accounts/ACc967eebc9c8a2ab9e9c992a396f866e6/Messages.json"
+ username: "AC338c214b52d222b6220819010acaabcd"
+ password: "3a2ca889a3195b2083a045ccb35b8d40"
+ sendername: "+1 844-286-3574"
+ host_url: "https://api.twilio.com/2010-04-01/Accounts/AC338c214b52d222b6220819010acaabcd/Messages.json"
  success_code: "success"
 
 parameter_mappings:
