@@ -51,8 +51,8 @@ class AttendanceManager
 
     file = File.new(@attendance_file, "r")
     while (line = file.gets)
-      str_arr = line.split(":")
-      @student_ids.push str_arr[1] unless (str_arr[1].nil? or str_arr[1] == "")
+      str_arr = line.split(",")
+      @student_ids.push str_arr[3] unless (str_arr[3].nil? or str_arr[3] == "")
     end
     file.close
 
@@ -60,7 +60,7 @@ class AttendanceManager
     batches.each do |batch|
       batch_students = batch.students
       batch_students.each do |student|
-        if @student_ids.include? student.admission_no
+        if @student_ids.include? student.id
           if student.is_sms_enabled
             if sms_setting.student_sms_active
               @present_student_recipients.push student.phone2 unless (student.phone2.nil? or student.phone2 == "")
