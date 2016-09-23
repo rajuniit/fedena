@@ -82,7 +82,8 @@ class AttendanceManager
           attendance_data["forenoon"] = 1
           attendance_data["afternoon"] = 1
 
-          Attendance.new(attendance_data)
+          @absentee = Attendance.new(attendance_data)
+          @absentee.save
           if student.is_sms_enabled
             if sms_setting.student_sms_active
               @absent_student_recipients.push student.phone2 unless (student.phone2.nil? or student.phone2 == "")
