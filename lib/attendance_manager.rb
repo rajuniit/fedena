@@ -52,7 +52,8 @@ class AttendanceManager
     file = File.new(@attendance_file, "r")
     while (line = file.gets)
       str_arr = line.split(",")
-      @student_ids.push str_arr[3] unless (str_arr[3].nil? or str_arr[3] == "")
+      id = str_arr[3].delete('"').to_i unless str_arr[3].nil?
+      @student_ids.push id unless id.nil?
     end
     file.close
 
