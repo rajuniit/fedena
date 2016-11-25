@@ -36,7 +36,7 @@ class AttendanceImportsController < ApplicationController
     directory = "public/uploads/attendance"
     path = File.join(directory, name)
     File.open(path, "wb") { |f| f.write(upload['datafile'].read) }
-    sms = Delayed::Job.enqueue(AttendanceManager.new(path))
+    sms = Delayed::Job.enqueue(OnnorokomAttendanceManager.new(path))
     flash[:notice] = "#{t('attendance_flash_1')}"
     redirect_to :controller => "attendance_imports", :action => "new"
   end

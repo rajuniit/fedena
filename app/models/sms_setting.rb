@@ -65,6 +65,13 @@ class SmsSetting < ActiveRecord::Base
     return config
   end
 
+  def self.get_onnorokom_sms_config
+    if File.exists?("#{Rails.root}/config/sms_settings.yml")
+      config = YAML.load_file(File.join(Rails.root,"config","onnorokom_sms_settings.yml"))
+    end
+    return config
+  end
+
    def self.application_sms_status
     application_sms = SmsSetting.find_by_settings_key("ApplicationEnabled")
     return true if application_sms and application_sms.is_enabled
