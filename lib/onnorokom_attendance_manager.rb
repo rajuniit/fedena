@@ -2,6 +2,7 @@
 require 'net/http'
 require 'yaml'
 require 'translator'
+require 'savon'
 
 class OnnorokomAttendanceManager
   attr_accessor :attendance_file,
@@ -74,6 +75,7 @@ class OnnorokomAttendanceManager
       @username = @config['sms_settings']['username']
       @password = @config['sms_settings']['password']
       @success_code = @config['sms_settings']['success_code']
+      @soap_client = Savon::Service.new(@sms_url)
     end
   end
 
@@ -133,6 +135,6 @@ class OnnorokomAttendanceManager
     params["smsType"] = "TEXT"
     params["maskName"] = "DemoMask"
     params["campaignName"] = ""
-    @soapClient.one_to_many(params)
+    @soap_client.one_to_many(params)
   end
 end
