@@ -75,7 +75,9 @@ class OnnorokomAttendanceManager
       @username = @config['sms_settings']['username']
       @password = @config['sms_settings']['password']
       @success_code = @config['sms_settings']['success_code']
-      @soap_client = Savon::Service.new(@sms_url)
+      @savon_client = Savon::Client.new do
+        wsdl.document = @sms_url
+      end
     end
   end
 
@@ -127,14 +129,20 @@ class OnnorokomAttendanceManager
   end
 
   def send_sms(message, numbers)
-    params = Hash.new
-    params["userName"] = @username,
-        params["userPassword"] = @password,
-        params["messageText"] = message
-    params["numberList"] = numbers
-    params["smsType"] = "TEXT"
-    params["maskName"] = "DemoMask"
-    params["campaignName"] = ""
-    @soap_client.one_to_many(params)
+
+    response = @savon_client.request :ns1, :one_to_many do
+
+      soap.body = {
+          "ns1:userName" => @username,
+          "ns1:userPassword" => @password,
+          "ns1:messageText" => message,
+          "ns1:numberList" => numbers,
+          "ns1:smsType" => "TEXT",
+          "ns1:maskName" => "DemoMask",
+          "ns1:campaignName" => ""
+      }
+      soap.env_namespace = "SOAP-ENV"
+
+    end
   end
 end
