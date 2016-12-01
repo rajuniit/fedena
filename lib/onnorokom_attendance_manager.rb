@@ -76,7 +76,7 @@ class OnnorokomAttendanceManager
       @password = @config['sms_settings']['password']
       @success_code = @config['sms_settings']['success_code']
       @savon_client = Savon::Client.new do
-        wsdl.document = @sms_url
+        wsdl.document = "http://api2.onnorokomsms.com/sendsms.asmx?wsdl"
       end
     end
   end
@@ -133,8 +133,8 @@ class OnnorokomAttendanceManager
     response = @savon_client.request :ns1, :one_to_many do
 
       soap.body = {
-          "ns1:userName" => @username,
-          "ns1:userPassword" => @password,
+          "ns1:userName" => "01811393240",
+          "ns1:userPassword" => "bce337",
           "ns1:messageText" => message,
           "ns1:numberList" => numbers,
           "ns1:smsType" => "TEXT",

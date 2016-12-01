@@ -66,7 +66,7 @@ class SmsSetting < ActiveRecord::Base
   end
 
   def self.get_onnorokom_sms_config
-    if File.exists?("#{Rails.root}/config/sms_settings.yml")
+    if File.exists?("#{Rails.root}/config/onnorokom_sms_settings.yml")
       config = YAML.load_file(File.join(Rails.root,"config","onnorokom_sms_settings.yml"))
     end
     return config
