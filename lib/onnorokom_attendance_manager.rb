@@ -98,9 +98,9 @@ class OnnorokomAttendanceManager
             end
           end
         end
-      rescue Savon::SOAPFault => e
+      rescue Savon::SOAP::Fault => e
         message_log.sms_logs.create(:mobile => numbers, :gateway_response => e.message)
-      rescue Savon::HTTPError => e
+      rescue Savon::Error => e
         message_log.sms_logs.create(:mobile => numbers, :gateway_response => e.message)
       end
 
@@ -118,9 +118,9 @@ class OnnorokomAttendanceManager
             end
           end
         end
-      rescue Savon::SOAPFault => e
+      rescue Savon::SOAP::Fault => e
         message_log.sms_logs.create(:mobile => numbers, :gateway_response => e.message)
-      rescue Savon::HTTPError => e
+      rescue Savon::Error => e
         message_log.sms_logs.create(:mobile => numbers, :gateway_response => e.message)
       end
 
