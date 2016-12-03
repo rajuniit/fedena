@@ -88,8 +88,8 @@ class OnnorokomAttendanceManager
       begin
         numbers = @present_student_parent_recipients.join(',')
         response = send_sms(@present_student_parent_message, numbers).to_hash
-        if response.success?
-          message_log.sms_logs.create(:mobile => numbers, :gateway_response => response.to_hash)
+        if response.empty?
+          message_log.sms_logs.create(:mobile => numbers, :gateway_response => response.to_s)
           sms_count = Configuration.find_by_config_key("TotalSmsCount")
           new_count = sms_count.config_value.to_i + @absent_student_parent_recipients.count
           sms_count.update_attributes(:config_value => new_count)
@@ -104,8 +104,8 @@ class OnnorokomAttendanceManager
       begin
         numbers = @absent_student_parent_recipients.join(',')
         response = send_sms(@present_student_parent_message, numbers).to_hash
-        if response.success?
-          message_log.sms_logs.create(:mobile => numbers, :gateway_response => response.to_hash)
+        if response
+          message_log.sms_logs.create(:mobile => numbers, :gateway_response => response.to_s)
           sms_count = Configuration.find_by_config_key("TotalSmsCount")
           new_count = sms_count.config_value.to_i + @absent_student_parent_recipients.count
           sms_count.update_attributes(:config_value => new_count)
