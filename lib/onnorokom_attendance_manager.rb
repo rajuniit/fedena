@@ -87,36 +87,28 @@ class OnnorokomAttendanceManager
       message_log.save
       begin
         numbers = @present_student_parent_recipients.join(',')
-        response = send_sms(@present_student_parent_message, numbers)
-        if response.body.present?
-          message_log.sms_logs.create(:mobile => numbers, :gateway_response => response.body)
-          if @success_code.present?
-            if response.body.to_s.include? @success_code
-              sms_count = Configuration.find_by_config_key("TotalSmsCount")
-              new_count = sms_count.config_value.to_i + @absent_student_parent_recipients.count
-              sms_count.update_attributes(:config_value => new_count)
-            end
-          end
+        response = send_sms(@present_student_parent_message, numbers).to_hash
+        if response.success?
+          message_log.sms_logs.create(:mobile => numbers, :gateway_response => response.to_hash)
+          sms_count = Configuration.find_by_config_key("TotalSmsCount")
+          new_count = sms_count.config_value.to_i + @absent_student_parent_recipients.count
+          sms_count.update_attributes(:config_value => new_count)
         end
       rescue Savon::SOAP::Fault => e
-        message_log.sms_logs.create(:mobile => numbers, :gateway_response => e.message)
+        message_log.sms_logs.create(:mobile => numbers, :gateway_response => e.to_s)
       rescue Savon::Error => e
-        message_log.sms_logs.create(:mobile => numbers, :gateway_response => e.message)
+        message_log.sms_logs.create(:mobile => numbers, :gateway_response => e.to_s)
       end
 
 
       begin
         numbers = @absent_student_parent_recipients.join(',')
-        response = send_sms(@present_student_parent_message, numbers)
-        if response.body.present?
-          message_log.sms_logs.create(:mobile => numbers, :gateway_response => response.body)
-          if @success_code.present?
-            if response.body.to_s.include? @success_code
-              sms_count = Configuration.find_by_config_key("TotalSmsCount")
-              new_count = sms_count.config_value.to_i + @absent_student_parent_recipients.count
-              sms_count.update_attributes(:config_value => new_count)
-            end
-          end
+        response = send_sms(@present_student_parent_message, numbers).to_hash
+        if response.success?
+          message_log.sms_logs.create(:mobile => numbers, :gateway_response => response.to_hash)
+          sms_count = Configuration.find_by_config_key("TotalSmsCount")
+          new_count = sms_count.config_value.to_i + @absent_student_parent_recipients.count
+          sms_count.update_attributes(:config_value => new_count)
         end
       rescue Savon::SOAP::Fault => e
         message_log.sms_logs.create(:mobile => numbers, :gateway_response => e.message)
@@ -130,7 +122,7 @@ class OnnorokomAttendanceManager
 
   def send_sms(message, numbers)
 
-    response = @savon_client.request :ns1, :one_to_many do
+    @savon_client.request :ns1, :one_to_many do
 
       soap.body = {
           "ns1:userName" => "01811393240",
