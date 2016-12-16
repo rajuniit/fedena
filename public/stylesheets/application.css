@@ -9,8 +9,16 @@ body {
     clear:both;
 }
 #header_bg {
-    height : 80px;
-    background : #b00 url(../../images/application/bg_pattern.png) repeat;
+    /*height : 80px;*/
+    /*background : #b00 url(../../images/application/bg_pattern.png) repeat;*/
+    background-color:black;
+    background-image:
+            radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+            radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+    background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
 }
 #header {
     width : 980px; 
@@ -916,7 +924,14 @@ tr.tr-blank{
     margin-top : -33px; */
     height : 66px;
     clear : both;
-    background: url(/images/foot.png) repeat-x;
+    background-color:black;
+    background-image:
+            radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+            radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+            radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+            radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+    background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
     width:100%;
     margin-top:15px;
 }
